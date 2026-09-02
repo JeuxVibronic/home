@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeux Vibronic</title>
+<style>
+:root {
+  --green: #2C5F2D;
+  --green-dark: #1e3320;
+  --gold: #C9A84C;
+  --cream: #FAFAF5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Times New Roman', Times, serif; background: var(--cream); color: var(--green-dark); }
+
+nav {
+  background: var(--green-dark);
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--gold);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo img { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--gold); object-fit: cover; background: white; }
+.nav-brand { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 13px; letter-spacing: 2px; color: #a8e6a8; text-decoration: none; text-transform: uppercase; }
+.nav-links a:hover { color: var(--gold); }
+
+.hero { background: var(--green); min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 20px; border: 1px solid rgba(201,168,76,0.3); pointer-events: none; }
+.hero-content { position: relative; z-index: 1; max-width: 700px; }
+.hero-eyebrow { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 13px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; display: block; }
+.hero-title { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: clamp(48px,8vw,80px); color: var(--cream); line-height: 0.9; margin-bottom: 0.5rem; letter-spacing: 2px; }
+.hero-title span { color: var(--gold); }
+.hero-subtitle { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: clamp(20px,4vw,32px); color: #a8e6a8; letter-spacing: 3px; margin-bottom: 1.5rem; }
+.hero-desc { font-size: 16px; color: #c8ecc8; line-height: 1.8; margin-bottom: 2rem; font-style: italic; }
+.divider { display: flex; align-items: center; gap: 12px; margin: 1.5rem auto; max-width: 300px; }
+.divider-line { flex: 1; height: 1px; background: var(--gold); opacity: 0.5; }
+.divider-diamond { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+.hero-specs { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+.hero-spec { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.spec-val { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 22px; color: var(--gold); letter-spacing: 1px; }
+.spec-key { font-size: 11px; color: #a8e6a8; letter-spacing: 1px; text-transform: uppercase; }
+.btn-primary { display: inline-block; background: var(--gold); color: var(--green-dark); font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 14px 36px; text-decoration: none; cursor: pointer; border: none; }
+.btn-primary:hover { background: #e0ba5a; }
+.btn-secondary { display: inline-block; background: transparent; color: var(--gold); font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; padding: 12px 28px; text-decoration: none; border: 1.5px solid var(--gold); cursor: pointer; margin-left: 1rem; }
+.btn-secondary:hover { background: var(--gold); color: var(--green-dark); }
+
+section { padding: 5rem 2rem; }
+.section-inner { max-width: 900px; margin: 0 auto; }
+.section-eyebrow { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 11px; letter-spacing: 5px; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+.section-title { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: clamp(28px,4vw,42px); color: var(--green); letter-spacing: 2px; margin-bottom: 1.5rem; line-height: 1.1; }
+
+#commander { background: var(--cream); border-top: 3px solid var(--green); }
+.product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+.product-card { border: 1.5px solid var(--green); padding: 2rem; position: relative; }
+.product-card.featured { border-color: var(--gold); border-width: 2px; }
+.product-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--green-dark); font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; padding: 3px 12px; white-space: nowrap; }
+.product-name { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--green); margin-bottom: 0.5rem; }
+.product-price { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 32px; color: var(--gold); margin-bottom: 1rem; }
+.product-includes { list-style: none; margin-bottom: 1.5rem; }
+.product-includes li { font-size: 13px; color: #444; padding: 4px 0; display: flex; align-items: center; gap: 8px; }
+.product-includes li::before { content: ''; display: inline-block; width: 5px; height: 5px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+.payment-options { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.payment-label { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 10px; letter-spacing: 3px; color: #888; text-transform: uppercase; display: block; margin-bottom: 0.25rem; }
+
+.contents-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-top: 2rem; }
+.content-item { display: flex; align-items: center; justify-content: center; text-align: center; padding: 1.5rem 1rem; border: 1px solid #ddd; border-top: 3px solid var(--gold); min-height: 120px; }
+.content-icon { font-size: 28px; margin-bottom: 0.5rem; display: block; }
+.content-label { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 13px; letter-spacing: 1px; color: var(--green); }
+
+#services { background: var(--green-dark); }
+#services .section-title { color: var(--cream); }
+#services .section-eyebrow { color: var(--gold); }
+.services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 2rem; }
+.service-card { border: 1px solid rgba(201,168,76,0.3); padding: 1.75rem; background: rgba(255,255,255,0.03); }
+.service-icon { font-size: 24px; margin-bottom: 0.75rem; display: block; }
+.service-name { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 16px; letter-spacing: 2px; color: var(--gold); margin-bottom: 0.5rem; }
+.service-desc { font-size: 13px; color: #a8c8a8; line-height: 1.7; }
+.service-cta { margin-top: 3rem; text-align: center; }
+.service-cta p { font-size: 15px; color: #c8ecc8; font-style: italic; margin-bottom: 1.5rem; }
+
+#apropos { background: #f0ece0; border-top: 3px solid var(--green); }
+.apropos-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center; margin-top: 2rem; }
+.apropos-logo { text-align: center; }
+.apropos-logo img { width: 180px; height: 180px; border-radius: 50%; border: 3px solid var(--gold); object-fit: cover; background: white; }
+.apropos-text p { font-size: 15px; line-height: 1.9; color: #333; margin-bottom: 1rem; }
+
+#contact { background: var(--green); text-align: center; }
+#contact .section-title { color: var(--cream); }
+#contact .section-eyebrow { color: var(--gold); }
+.contact-desc { font-size: 15px; color: #c8ecc8; font-style: italic; margin-bottom: 2.5rem; line-height: 1.8; }
+.contact-cards { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.contact-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(201,168,76,0.4); padding: 1.5rem 2rem; min-width: 200px; }
+.contact-card-label { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+.contact-card-value { font-size: 14px; color: var(--cream); font-weight: 600; }
+
+footer { background: var(--green-dark); border-top: 2px solid var(--gold); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-brand { font-family: 'Agency FB','Arial Narrow',sans-serif; font-size: 13px; letter-spacing: 2px; color: var(--gold); }
+.footer-legal { font-size: 11px; color: #688; }
+.collab-footer { display: flex; align-items: center; gap: 10px; }
+.collab-footer span { font-size: 10px; color: #688; font-style: italic; }
+.refuge-footer { height: 30px; background: white; padding: 2px 6px; border-radius: 2px; }
+
+@media (max-width: 640px) {
+  .product-grid { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+  .contents-grid { grid-template-columns: 1fr 1fr; }
+  .apropos-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="logo-nav.png">
+    <span class="nav-brand">JEUX VIBRONIC</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#commander">Commander</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero" id="accueil">
+  <div class="hero-content">
+    <span class="hero-eyebrow">Jeux Vibronic présente</span>
+    <h1 class="hero-title">L'ultime<br><span>Sherby-Défi</span></h1>
+    <p class="hero-subtitle">Le Combat des Fac</p>
+    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+    <p class="hero-desc">Jeu à boire de plateau sur la vie étudiante à Sherbrooke.<br>Les tunnels de l'uni, les 5@8, le mont Bellevue. Ton histoire.</p>
+    <div class="hero-specs">
+      <div class="hero-spec"><span class="spec-val">3+</span><span class="spec-key">Joueurs</span></div>
+      <div class="hero-spec"><span class="spec-val">18+</span><span class="spec-key">Âge</span></div>
+      <div class="hero-spec"><span class="spec-val">50+</span><span class="spec-key">Cases</span></div>
+      <div class="hero-spec"><span class="spec-val">1–2h</span><span class="spec-key">Durée</span></div>
+    </div>
+    <a href="#commander" class="btn-primary">Commander</a>
+    <a href="#gameplay" class="btn-secondary">En savoir plus</a>
+    <div style="margin-top:2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center;">
+      <span style="font-size:13px;color:#a8e6a8;font-style:italic;">En collaboration avec</span>
+      <img src="logo-footer-2.png" style="height:30px;background:white;padding:2px 6px;border-radius:2px;">
+    </div>
+  </div>
+</section>
+
+<section id="gameplay" style="background: var(--gold); border-top: 3px solid var(--cream); border-bottom: 3px solid var(--cream);">
+  <div class="section-inner">
+    <span class="section-eyebrow" style="color: var(--green-dark);">Description du jeu</span>
+    <h2 class="section-title" style="color: var(--green-dark);">Soyez la première personne à graduer!</h2>
+    
+    <div style="background: rgba(255, 255, 255, 0.5); padding: 2rem; border: 1.5px solid var(--green-dark); margin-bottom: 2rem;">
+      <p style="color: var(--green-dark); font-size: 15px; line-height: 1.8; margin: 0;">
+        Dans ce jeu de plateau à boire, vous incarnez un étudiant qui tente de terminer son parcours universitaire, un déplacement de pion à la fois. Chaque case du plateau représente un défi ou une action à accomplir. Les joueurs devront survivre aux aléas de la vie étudiante, traverser Sherbrooke dans son ensemble et réussis leurs examens. La première personne à atteindre la fin du parcours et à obtenir son diplôme est déclaré vainqueur!
+        <br>
+        <br>Créé et testé à même la communauté universitaire, c'est le jeu idéal pour bien se préparer à aller à un 5@8 (variante rapide pour prédrink) ou comme activité centrale pour vivre une soirée nostalgique de ses années d'études.
+      </p>
+    </div>
+    
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <img src="case1.jpg" style="height: 140px; width: auto;">
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <img src="case2.jpg" style="height: 140px; width: auto;">
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <img src="emballage.jpg" style="height: 140px; width: auto;">
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <img src="case3.jpg" style="height: 140px; width: auto;">
+      </div>
+      <div style="display: flex; align-items: center; justify-content: center;">
+        <img src="case4.jpg" style="height: 140px; width: auto;">
+      </div>
+    </div>
+    
+    <div style="padding: 2rem; margin-top: 2.5rem;">
+      <p style="font-size: 12px; line-height: 1.8; color: #444; margin: 0; text-align:center">
+        <strong>Avertissement responsable :</strong> Le présent jeu est de nature <strong>parodique</strong>, servant à mettre en lumière certains moments et endroits culte similaires à la vie universitaire à Sherbrooke. En aucun cas ce jeu ou toute personne affiliée avec celui-ci ne promeut la consommation excessive d'alcool. Bien que le texte écrit sur les cases fasse référence à « boire », « gorgées », « verre » et « shot », il est <strong>en aucun cas requis</strong> de boire de l'alcool pour jouer à ce jeu. Le jeu peut entièrement être apprécié en version « virgin ».
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="commander">
+  <div class="section-inner">
+    <span class="section-eyebrow">Disponible maintenant</span>
+    <h2 class="section-title">Commander le jeu</h2>
+    <p style="font-size:15px;color:#444;line-height:1.8;max-width:600px;margin-bottom:0;">Fait à la main au Québec, en vente à la microbrasserie Le Refuge des Brasseurs. 
+      <br> Deux options de paiement en ligne disponibles.</p>
+    <div class="product-grid">
+      <div class="product-card">
+        <p class="product-name">Jeu complet</p>
+        <p class="product-price">29,99$</p>
+        <ul class="product-includes">
+          <li>1 plateau de jeu (4 panneaux)</li>
+          <li>5 jetons</li>
+          <li>1 dé</li>
+          <li>1 livret de règles</li>
+          <li>Ramassage à la microbrasserie Le Refuge des Brasseurs</li>
+        </ul>
+        <div style="margin-top: 1rem; border: 1.5px solid #ddd; padding: 1.5rem; background: rgba(255,255,255,0.3);">
+          <form action="https://formspree.io/f/xeaqgeew" method="POST">
+            <input type="hidden" name="product" value="Jeu complet - 29,99$">
+            
+            <div style="margin-bottom: 1rem;">
+              <label style="font-family:'Agency FB','Arial Narrow',sans-serif; font-size:12px; letter-spacing:1px; color:var(--green-dark); text-transform:uppercase; display:block; margin-bottom:0.3rem;">Nom complet</label>
+              <input type="text" name="name" required style="width:100%; padding:8px; border:1px solid #ddd; font-size:14px; font-family:inherit;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+              <label style="font-family:'Agency FB','Arial Narrow',sans-serif; font-size:12px; letter-spacing:1px; color:var(--green-dark); text-transform:uppercase; display:block; margin-bottom:0.3rem;">Courriel</label>
+              <input type="email" name="email" required style="width:100%; padding:8px; border:1px solid #ddd; font-size:14px; font-family:inherit;">
+            </div>
+            
+            <button type="submit" class="btn-primary" style="width:100%; text-align:center; font-size:13px; padding:10px; border:none; cursor:pointer;">Commander via Interac</button>
+          </form>
+          
+          <p style="font-size:11px; color:#666; line-height:1.6; margin-top:1rem; margin-bottom:0;">
+            En envoyant ce formulaire, vous placerez votre commande pour un achat via Interac. Nous vous contacterons dans un délai maximal d'une semaine pour confirmer la disponibilité des stocks et confirmer votre commande. Les coordonnées de paiement seront transmises à ce moment.
+            <br><br>Le paiement devra être effectué dans un délai maximal de deux semaines après l'émission de laconfirmation de commande, après quoi la commande sera annulée.
+            <br><br>Une fois le paiement reçu, vous recevrez une confirmation lorsque la commande sera disponible pour ramassage à la microbrasserie Le Refuge des Brasseurs. Emmenez avec vous votre email de confirmation comme preuve d'achat.
+            <br><br>Pour toute question, n'hésitez pas à nous contacter à jeux.vibronic@outlook.com. Merci de votre support!
+          </p>
+        </div>
+      </div>
+      <div class="product-card featured">
+        <p class="product-name">Jeu + Livraison locale</p>
+        <p class="product-price">39,99$</p>
+        <ul class="product-includes">
+          <li>1 plateau de jeu (4 panneaux)</li>
+          <li>5 jetons</li>
+          <li>1 dé</li>
+          <li>1 livret de règles</li>
+          <li>Livraison locale à Sherbrooke</li>
+        </ul>
+        <div style="margin-top: 1rem; border: 2px solid var(--gold); padding: 1.5rem; background: rgba(255,255,255,0.3);">
+          <form action="https://formspree.io/f/xeaqgeew" method="POST">
+            <input type="hidden" name="product" value="Jeu + Livraison locale - 39,99$">
+            
+            <div style="margin-bottom: 1rem;">
+              <label style="font-family:'Agency FB','Arial Narrow',sans-serif; font-size:12px; letter-spacing:1px; color:var(--green-dark); text-transform:uppercase; display:block; margin-bottom:0.3rem;">Nom complet</label>
+              <input type="text" name="name" required style="width:100%; padding:8px; border:1px solid #ddd; font-size:14px; font-family:inherit;">
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <label style="font-family:'Agency FB','Arial Narrow',sans-serif; font-size:12px; letter-spacing:1px; color:var(--green-dark); text-transform:uppercase; display:block; margin-bottom:0.3rem;">Courriel</label>
+              <input type="email" name="email" required style="width:100%; padding:8px; border:1px solid #ddd; font-size:14px; font-family:inherit;">
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <label style="font-family:'Agency FB','Arial Narrow',sans-serif; font-size:12px; letter-spacing:1px; color:var(--green-dark); text-transform:uppercase; display:block; margin-bottom:0.3rem;">Adresse complète (Sherbrooke uniquement)</label>
+              <input type="text" name="address" required style="width:100%; padding:8px; border:1px solid #ddd; font-size:14px; font-family:inherit;">
+            </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.5); border: 1px solid #ddd;">
+              <p style="font-family:'Agency FB','Arial Narrow',sans-serif; font-size:12px; letter-spacing:1px; color:var(--green-dark); text-transform:uppercase; margin-bottom:0.8rem; margin-top:0;">Mode de livraison</p>
+              
+              <div style="margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                <input type="radio" id="delivery-door" name="delivery_mode" value="Livraison à la porte" style="width: 16px; height: 16px; cursor: pointer;">
+                <label for="delivery-door" style="font-size: 13px; color: #333; cursor: pointer; margin: 0;">Livraison laissée à la porte</label>
+              </div>
+              
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="radio" id="delivery-schedule" name="delivery_mode" value="Prendre entente pour une plage de disponibilité" style="width: 16px; height: 16px; cursor: pointer;">
+                <label for="delivery-schedule" style="font-size: 13px; color: #333; cursor: pointer; margin: 0;">Prendre entente pour une plage de disponibilité</label>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn-primary" style="width:100%; text-align:center; font-size:13px; padding:10px; border:none; cursor:pointer;">Commander via Interac</button>
+          </form>
+          
+          <p style="font-size:11px; color:#666; line-height:1.6; margin-top:1rem; margin-bottom:0;">
+            En envoyant ce formulaire, vous placerez votre commande pour un achat via Interac. Nous vous contacterons dans un délai maximal d'une semaine pour confirmer la disponibilité des stocks et confirmer votre commande. Les coordonnées de paiement seront transmises à ce moment. Si vous avez choisi comme mode de livraison « Prendre entente pour une plage de disponibilité », nous aurons besoin de coordonner un créneau convenable avec vous.
+            <br><br>Le paiement devra être effectué dans un délai maximal de deux semaines, après quoi la commande sera annulée.
+            <br><br>Une fois le paiement reçu, vous recevrez une confirmation pour confirmer le mode de livraison. Conservez votre email de confirmation comme preuve d'achat.
+            <br><br>Pour toute question, n'hésitez pas à nous contacter à jeux.vibronic@outlook.com. Merci de votre support!
+          </p>
+        </div>
+      </div>
+    </div>
+    <h3 style="font-family:'Agency FB','Arial Narrow',sans-serif;font-size:18px;letter-spacing:3px;color:var(--green);margin-top:3rem;margin-bottom:0.5rem;">CONTENU DU PRODUIT</h3>
+    <div class="contents-grid">
+      <div class="content-item"><span class="content-label">1 plateau<br>(4 panneaux)</span></div>
+      <div class="content-item"><span class="content-label">5 jetons</span></div>
+      <div class="content-item"><span class="content-label">1 dé</span></div>
+      <div class="content-item"><span class="content-label">1 livret<br>de règles</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-inner">
+    <span class="section-eyebrow">Jeux Vibronic</span>
+    <h2 class="section-title">Services de conception</h2>
+    <p style="font-size:15px;color:#a8c8a8;line-height:1.8;max-width:600px;">Tu as une idée de jeu qui traîne dans ta tête depuis longtemps? Jeux Vibronic conçoit et assemble des jeux de société sur mesure, de l'idée au produit fini.</p>
+    <div class="services-grid">
+      <div class="service-card"><p class="service-name">Conception</p><p class="service-desc">Développement des règles, mécaniques de jeu, équilibrage et tests. Nous partons de votre idée initiale et nous la structurons.</p></div>
+      <div class="service-card"><p class="service-name">Création</p><p class="service-desc">Design du plateau, des cases, de l'emballage et du matériel visuel. Chaque élément est pensé pour votre univers.</p></div>
+      <div class="service-card"><p class="service-name">Assemblage</p><p class="service-desc">Fabrication artisanale au Québec. Idéal pour des occasions spéciales, anniversaires ou événements.</p></div>
+    </div>
+    <div class="service-cta">
+      <p>Un jeu thématique pour un anniversaire, un événement ou simplement concrétiser une idée? Contactez-moi.</p>
+      <a href="#contact" class="btn-primary">Discuter d'un projet</a>
+    </div>
+  </div>
+</section>
+
+<section id="apropos">
+  <div class="section-inner">
+    <span class="section-eyebrow">L'entreprise</span>
+    <h2 class="section-title">À propos de Jeux Vibronic</h2>
+    <div class="apropos-grid">
+      <div class="apropos-logo">
+        <img src="logo-about.png">
+      </div>
+      <div class="apropos-text">
+        <p>Jeux Vibronic conçoit et fabrique des jeux de société artisanaux, pensés et assemblés à la main.</p>
+        <p>Pas de production de masse, juste des jeux ancrés dans des lieux et des vécus bien réels, créés avec une attention sincère aux détails.</p>
+        <p>Notre premier jeu, <strong>L'ultime Sherby-Défi : Le Combat des Fac</strong>, est né d'une ambition de créer un jeu pour un groupe d'amis.</p>
+        <p>Fait à la main, au Québec, avec un amour sincère et un humour caractéristique.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-inner">
+    <span class="section-eyebrow">Nous joindre</span>
+    <h2 class="section-title">Contact</h2>
+    <p class="contact-desc">Pour commander, proposer un projet de jeu sur mesure<br>ou simplement poser une question.</p>
+    <div class="contact-cards">
+      <div class="contact-card"><span class="contact-card-label">Courriel</span><span class="contact-card-value">jeux.vibronic@outlook.com</span></div>
+      <div class="contact-card"><span class="contact-card-label">Facebook</span><span class="contact-card-value">Jeux Vibronic</span></div>
+    </div>
+    <a href="mailto:jeux.vibronic@outlook.com" class="btn-primary">Envoyer un courriel</a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-brand">JEUX VIBRONIC</span>
+  <span class="footer-legal">© 2026 Jeux Vibronic · Fabriqué au Québec · 18+</span>
+</footer>
+
+</body>
+</html>
